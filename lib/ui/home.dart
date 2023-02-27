@@ -7,9 +7,28 @@ import 'common/check_width.dart';
 import 'grid_item.dart';
 import 'list_item.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   final String title = 'Это интересно';
+  List<Person> people = [];
+
+  Future<void> getPeople() async {
+    people = await PeopleApi().loadPeople();
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPeople();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,43 +62,27 @@ class Home extends StatelessWidget {
                 ),
               ),
             ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: FutureBuilder(
-                future: PeopleApi().loadPeople(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<Person>> snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                      return const Center(child: Text('NONE'));
-                    case ConnectionState.waiting:
-                      return const Center(child: CircularProgressIndicator());
-                    case ConnectionState.done:
-                      return CurrentScreen.isDesktop(context)
-                          ? GridView.builder(
-                              itemCount: snapshot.data!.length,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3),
-                              itemBuilder: (context, index) {
-                                return PersonGridTile(
-                                    person: snapshot.data![index]);
-                              })
-                          : ListView.builder(
-                              itemCount: snapshot.data?.length ?? 0,
-                              itemBuilder: (contex, index) {
-                                return PersonListTile(
-                                    person: snapshot.data![index]);
-                              });
-                    default:
-                      return const SingleChildScrollView(
-                          child: Text('Default'));
-                  }
-                },
-              ),
-            ),
-          ),
+          people.isEmpty
+              ? Center(child: CircularProgressIndicator())
+              : Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: CurrentScreen.isDesktop(context)
+                        ? GridView.builder(
+                            itemCount: people.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3),
+                            itemBuilder: (context, index) {
+                              return PersonGridTile(person: people[index]);
+                            })
+                        : ListView.builder(
+                            itemCount: people.length,
+                            itemBuilder: (contex, index) {
+                              return PersonListTile(person: people[index]);
+                            }),
+                  ),
+                ),
         ],
       ),
     );
