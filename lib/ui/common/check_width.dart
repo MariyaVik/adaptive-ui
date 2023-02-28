@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CurrentScreen extends StatelessWidget {
   final Widget mobile;
   final Widget desktop;
-  static const double _width = 700;
+  static const double _width = 600;
 
   const CurrentScreen({
     required this.mobile,

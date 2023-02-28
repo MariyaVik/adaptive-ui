@@ -25,6 +25,7 @@ class PersonGridTile extends StatelessWidget {
           );
         },
         child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.onPrimary,
               borderRadius: BorderRadius.circular(20)),
@@ -47,9 +48,12 @@ class PersonGridTile extends StatelessWidget {
                   );
                 },
               ),
+              const SizedBox(height: 4),
               Text(person.name!, style: Theme.of(context).textTheme.bodyLarge),
               Text(
                 person.email!.toLowerCase(),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

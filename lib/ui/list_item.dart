@@ -16,7 +16,7 @@ class PersonListTile extends StatelessWidget {
           showModalBottomSheet(
               context: context,
               builder: (context) {
-                return Container(
+                return const SizedBox(
                   height: 140,
                   child: MoreInfoList(),
                 );
@@ -49,9 +49,11 @@ class PersonListTile extends StatelessWidget {
                 const SizedBox(width: 16),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(person.name!,
                         style: Theme.of(context).textTheme.bodyLarge),
+                    const SizedBox(height: 4),
                     Text(person.email!.toLowerCase(),
                         style: Theme.of(context).textTheme.bodySmall),
                   ],
